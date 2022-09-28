@@ -1,3 +1,3 @@
 ﻿
-using var game = new IntroToMonoGame.Game1();
+using var game = new GD.Main();
 game.Run();
