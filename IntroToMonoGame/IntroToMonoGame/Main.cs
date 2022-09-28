@@ -9,6 +9,7 @@ namespace GD
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private VertexPositionColor[] vertices;
+        private float rotZ;
         private Matrix world;
         private Matrix view;
         private Matrix projection;
@@ -39,10 +40,14 @@ namespace GD
                 {
                     new VertexPositionColor(new Vector3(-1,0,0), Color.Red),
                     new VertexPositionColor(new Vector3(1,0,0), Color.Blue),
+
+                    new VertexPositionColor(new Vector3(0,1,0), Color.Green),
+                    new VertexPositionColor(new Vector3(0,-1,0), Color.Orange),
                 };
 
             //world
-            world = Matrix.Identity;
+            rotZ = 0;
+            world = Matrix.Identity * Matrix.CreateRotationZ(rotZ);
 
             //view
             view = Matrix.CreateLookAt(new Vector3(0, 0, 5),
@@ -71,7 +76,8 @@ namespace GD
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            //    System.Diagnostics.Debug.WriteLine("Update...");
+            rotZ += MathHelper.ToRadians(1);
+            world = Matrix.Identity * Matrix.CreateRotationZ(rotZ);
 
             base.Update(gameTime);
         }
@@ -89,7 +95,7 @@ namespace GD
             //pass vertices
             _graphics.GraphicsDevice.
                 DrawUserPrimitives<VertexPositionColor>(
-                PrimitiveType.LineStrip, vertices, 0, 1);
+                PrimitiveType.LineList, vertices, 0, 2);
 
             base.Draw(gameTime);
         }
