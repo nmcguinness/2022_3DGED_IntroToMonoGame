@@ -9,6 +9,7 @@ namespace GD
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private VertexPositionColor[] vertices;
+        private short[] indices;
         private float rotZ;
         private Matrix world;
         private Matrix view;
@@ -38,7 +39,23 @@ namespace GD
             //vertices using a specific vertex type
             vertices = new VertexPositionColor[]
                 {
+                   //FL
+                    new VertexPositionColor(new Vector3(-1,0,1), Color.Red),
+                    //FR
+                    new VertexPositionColor(new Vector3(1,0,1), Color.Green),
+                    //BR
+                    new VertexPositionColor(new Vector3(1,0,-1), Color.Blue),
+                     //BL
+                    new VertexPositionColor(new Vector3(-1,0,-1), Color.Yellow),
                 };
+
+            indices = new short[]
+            {
+                0,1, //65,535
+                1,2,
+                2,3,
+                3,0
+            };
 
             //world
             rotZ = 0;
@@ -71,6 +88,15 @@ namespace GD
 
         protected override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+            effect.World = world;
+            effect.View = view;
+            effect.Projection = projection;
+            effect.CurrentTechnique.Passes[0].Apply();
+
+            _graphics.GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.LineList,
+                vertices, 0, vertices.Length, indices, 0, 4);
+
             base.Draw(gameTime);
         }
     }
