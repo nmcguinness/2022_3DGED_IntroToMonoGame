@@ -47,6 +47,8 @@ namespace GD
                     new VertexPositionColor(new Vector3(1,0,-1), Color.Blue),
                      //BL
                     new VertexPositionColor(new Vector3(-1,0,-1), Color.Yellow),
+                     //Apex
+                    new VertexPositionColor(new Vector3(0,1,0), Color.White),
                 };
 
             indices = new short[]
@@ -54,7 +56,8 @@ namespace GD
                 0,1, //65,535
                 1,2,
                 2,3,
-                3,0
+                3,0,
+                //4 pairs of indices
             };
 
             //world
@@ -95,7 +98,7 @@ namespace GD
             effect.CurrentTechnique.Passes[0].Apply();
 
             _graphics.GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.LineList,
-                vertices, 0, vertices.Length, indices, 0, 4);
+                vertices, 0, vertices.Length, indices, 0, 8);
 
             base.Draw(gameTime);
         }
