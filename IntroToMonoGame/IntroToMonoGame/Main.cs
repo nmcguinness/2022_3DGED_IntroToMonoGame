@@ -15,6 +15,95 @@ namespace GD
         private Matrix view;
         private Matrix projection;
         private BasicEffect effect;
+        private DemoVertexIndexBuffer demoVertexIndexBuffer;
+
+        public Main()
+        {
+            _graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+        }
+
+        private void SetGraphics(
+            int width, int height, bool isMouseVisible)
+        {
+            //calling set property
+            _graphics.PreferredBackBufferWidth = width;
+            _graphics.PreferredBackBufferHeight = height;
+            IsMouseVisible = isMouseVisible;
+            _graphics.ApplyChanges();
+        }
+
+        protected override void Initialize()
+        {
+            SetGraphics(1024, 768, false);
+
+            //view
+            view = Matrix.CreateLookAt(new Vector3(0, 2, 2),
+                Vector3.Zero, Vector3.UnitY);
+
+            //projection
+            projection = Matrix.CreatePerspectiveFieldOfView(
+                MathHelper.PiOver2, 640.0f / 480, 0.1f, 100);
+
+            //effect
+            effect = new BasicEffect(_graphics.GraphicsDevice);
+            effect.VertexColorEnabled = true;
+
+            demoVertexIndexBuffer = new DemoVertexIndexBuffer();
+
+            base.Initialize();
+        }
+
+        protected override void LoadContent()
+        {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            demoVertexIndexBuffer.Draw(_graphics.GraphicsDevice,
+                effect,
+                Matrix.Identity * Matrix.CreateTranslation(-1, 0, 0),
+                view, projection);
+
+            demoVertexIndexBuffer.Draw(_graphics.GraphicsDevice,
+              effect,
+              Matrix.Identity * Matrix.CreateTranslation(1, 0, 0),
+              view, projection);
+
+            demoVertexIndexBuffer.Draw(_graphics.GraphicsDevice,
+            effect,
+            Matrix.Identity *
+            Matrix.CreateScale(0.5f) *
+            Matrix.CreateTranslation(1, 0, -1),
+            view, projection);
+
+            base.Draw(gameTime);
+        }
+    }
+}
+
+/*
+namespace GD
+{
+    public class Main : Game
+    {
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private VertexPositionColor[] vertices;
+        private short[] indices;
+        private float rotZ;
+        private Matrix world;
+        private Matrix view;
+        private Matrix projection;
+        private BasicEffect effect;
 
         public Main()
         {
@@ -39,6 +128,7 @@ namespace GD
             //vertices using a specific vertex type
             vertices = new VertexPositionColor[]
                 {
+                  //VertexPositionColor = 4xfloats (rgba), 3xfloats (xyz) => 7x4bytes = 28 bytes
                    //FL
                     new VertexPositionColor(new Vector3(-1,0,1), Color.Red),
                     //FR
@@ -58,6 +148,10 @@ namespace GD
                 2,3,
                 3,0,
                 //4 pairs of indices
+                0,4, //FLU
+                1,4, //FRU
+                2,4, //BRU
+                3,4 //BLU
             };
 
             //world
@@ -86,6 +180,8 @@ namespace GD
 
         protected override void Update(GameTime gameTime)
         {
+            rotZ += MathHelper.ToRadians(1);
+            world = Matrix.Identity * Matrix.CreateRotationY(rotZ);
             base.Update(gameTime);
         }
 
@@ -104,6 +200,7 @@ namespace GD
         }
     }
 }
+*/
 
 /*
  namespace GD
