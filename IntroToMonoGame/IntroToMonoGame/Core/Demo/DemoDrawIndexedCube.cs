@@ -2,18 +2,18 @@
 using Microsoft.Xna.Framework.Graphics;
 using Color = Microsoft.Xna.Framework.Color;
 
-/// Technique 4 - Setting an array of vertices and indices on VRAM on GPU
+/// Exercise using Technique 4 - Draw a solid coloured cube
 
 namespace GD
 {
-    public class DemoDrawIndexedPrimitives
+    public class DemoDrawIndexedCube
     {
         private GraphicsDevice graphicsDevice;
         private VertexPositionColor[] verts;
         private VertexBuffer vertexBuffer;
         private IndexBuffer indexBuffer;
 
-        public DemoDrawIndexedPrimitives(GraphicsDevice graphicsDevice)
+        public DemoDrawIndexedCube(GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
             InitializeVertices();
