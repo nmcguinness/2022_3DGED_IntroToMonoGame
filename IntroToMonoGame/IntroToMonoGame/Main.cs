@@ -16,6 +16,7 @@ namespace GD
         private Matrix view;
         private Matrix projection;
         private BasicEffect effect;
+        private RasterizerState rasterizerState;
         private Camera camera;
         private DemoVertexIndices demoVertexIndices;
         private DemoDrawUserPrimitives demoDrawUserPrimitives;
@@ -52,8 +53,11 @@ namespace GD
             effect = new BasicEffect(_graphics.GraphicsDevice);
             effect.VertexColorEnabled = true;
 
+            //rasterizer state allows us to draw front and back using cullmode
+            rasterizerState = new RasterizerState();
+
             //camera
-            camera = new Camera(new Vector3(0, 0, 2), Vector3.Zero,
+            camera = new Camera(new Vector3(0, 0, 20), Vector3.Zero,
                 Vector3.UnitY);
 
             //use this area to instanciate different demos
@@ -80,8 +84,23 @@ namespace GD
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            demoDrawUserPrimitives.Draw(Matrix.Identity,
-                effect, camera);
+            //if (x % 2 == 0)
+            //    rasterizerState.CullMode = CullMode.None;
+            //else
+            //    rasterizerState.CullMode = CullMode.CullClockwiseFace;
+            //_graphics.GraphicsDevice.RasterizerState = rasterizerState;
+
+            for (int x = -10; x <= 10; x += 2)
+            {
+                for (int y = -10; y <= 10; y += 2)
+                {
+                    demoDrawUserPrimitives.Draw(
+                    Matrix.Identity
+                    * Matrix.CreateRotationY(rotZ / 60.0f)
+                    * Matrix.CreateTranslation(x, y, 0),
+                  effect, camera);
+                }
+            }
 
             //ISRoT
             //demoVertexIndices.Draw(_graphics.GraphicsDevice,
