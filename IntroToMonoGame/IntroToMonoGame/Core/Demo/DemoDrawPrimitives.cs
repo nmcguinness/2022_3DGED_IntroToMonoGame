@@ -2,13 +2,15 @@
 using Microsoft.Xna.Framework.Graphics;
 using Color = Microsoft.Xna.Framework.Color;
 
+/// Technique 3 - Setting an array of vertices on VRAM on GPU
+
 namespace GD
 {
     public class DemoDrawPrimitives
     {
         private GraphicsDevice graphicsDevice;
         private VertexPositionColor[] verts;
-        private VertexBuffer vertexBuffer;
+        private VertexBuffer vertexBuffer; //on VRAM beside GPU
 
         public DemoDrawPrimitives(GraphicsDevice graphicsDevice)
         {
@@ -29,7 +31,8 @@ namespace GD
         private void InitializeBuffer()
         {
             vertexBuffer = new VertexBuffer(graphicsDevice,
-                typeof(VertexPositionColor), verts.Length, BufferUsage.WriteOnly);
+                typeof(VertexPositionColor), verts.Length,
+                BufferUsage.None);
             vertexBuffer.SetData(verts);
         }
 
@@ -39,8 +42,8 @@ namespace GD
             effect.World = world;
             effect.View = camera.View;
             effect.Projection = camera.Projection;
-
             effect.CurrentTechnique.Passes[0].Apply();
+
             graphicsDevice.SetVertexBuffer(vertexBuffer);
             graphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 1);
         }

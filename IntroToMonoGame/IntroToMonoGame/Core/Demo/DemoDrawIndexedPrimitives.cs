@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Color = Microsoft.Xna.Framework.Color;
 
+/// Technique 4 - Setting an array of vertices and indices on VRAM on GPU
+
 namespace GD
 {
     public class DemoDrawIndexedPrimitives
@@ -32,7 +34,7 @@ namespace GD
         {
             vertexBuffer = new VertexBuffer(graphicsDevice,
                 typeof(VertexPositionColor), verts.Length, BufferUsage.WriteOnly);
-            vertexBuffer.SetData(verts);
+            vertexBuffer.SetData(verts); //moving the vertices to VRAM
 
             var indices = new short[] {
                 0, 1, 2, 0, 2, 3
@@ -40,7 +42,7 @@ namespace GD
 
             indexBuffer = new IndexBuffer(graphicsDevice, typeof(short),
                 indices.Length, BufferUsage.WriteOnly);
-            indexBuffer.SetData(indices);
+            indexBuffer.SetData(indices); //moving the indices to VRAM
         }
 
         public void Draw(Matrix world,
@@ -49,11 +51,14 @@ namespace GD
             effect.World = world;
             effect.View = camera.View;
             effect.Projection = camera.Projection;
-
             effect.CurrentTechnique.Passes[0].Apply();
+
+            //we are pointing the GPU at the vbuf and ibuf
             graphicsDevice.SetVertexBuffer(vertexBuffer);
             graphicsDevice.Indices = indexBuffer;
-            graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 2);
+
+            graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList,
+                0, 0, 2);
         }
     }
 }

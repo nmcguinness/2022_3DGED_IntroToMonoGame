@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Color = Microsoft.Xna.Framework.Color;
 
-///
 /// Technique 1 - Passing an array of vertices
 
 namespace GD

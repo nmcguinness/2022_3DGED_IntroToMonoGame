@@ -20,6 +20,8 @@ namespace GD
         private Camera camera;
         private DemoVertexIndices demoVertexIndices;
         private DemoDrawUserPrimitives demoDrawUserPrimitives;
+        private DemoDrawPrimitives demoDrawPrimitives;
+        private DemoDrawIndexedPrimitives demoDrawIndexedPrimitives;
 
         public Main()
         {
@@ -57,17 +59,36 @@ namespace GD
             rasterizerState = new RasterizerState();
 
             //camera
-            camera = new Camera(new Vector3(0, 0, 20), Vector3.Zero,
+            camera = new Camera(new Vector3(0, 0, 5), Vector3.Zero,
                 Vector3.UnitY);
 
-            //use this area to instanciate different demos
+            //technique 2 - pass vertices and indices
             demoVertexIndices = new DemoVertexIndices();
 
-            //technique 1
+            //technique 1 - pass vertices
             demoDrawUserPrimitives =
                 new DemoDrawUserPrimitives(_graphics.GraphicsDevice);
 
+            //technique 3 - set vertices on buffer
+            demoDrawPrimitives =
+                new DemoDrawPrimitives(_graphics.GraphicsDevice);
+
+            //technique 4 - set vertex and index buffers. wahoo!
+            demoDrawIndexedPrimitives
+                = new DemoDrawIndexedPrimitives(_graphics.GraphicsDevice);
+
             base.Initialize();
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            //demoDrawPrimitives.Draw(Matrix.Identity, effect, camera);
+            demoDrawIndexedPrimitives.Draw(Matrix.Identity,
+                effect, camera);
+
+            base.Draw(gameTime);
         }
 
         protected override void LoadContent()
@@ -78,42 +99,6 @@ namespace GD
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            //if (x % 2 == 0)
-            //    rasterizerState.CullMode = CullMode.None;
-            //else
-            //    rasterizerState.CullMode = CullMode.CullClockwiseFace;
-            //_graphics.GraphicsDevice.RasterizerState = rasterizerState;
-
-            for (int x = -10; x <= 10; x += 2)
-            {
-                for (int y = -10; y <= 10; y += 2)
-                {
-                    demoDrawUserPrimitives.Draw(
-                    Matrix.Identity
-                    * Matrix.CreateRotationY(rotZ / 60.0f)
-                    * Matrix.CreateTranslation(x, y, 0),
-                  effect, camera);
-                }
-            }
-
-            //ISRoT
-            //demoVertexIndices.Draw(_graphics.GraphicsDevice,
-            //    effect,
-            //    Matrix.Identity,
-            //    //* Matrix.CreateRotationY(MathHelper.ToRadians(10 * rotZ))
-            //    //* Matrix.CreateTranslation(1, 0, 0)
-            //    //* Matrix.CreateRotationY(MathHelper.ToRadians(rotZ)),
-            //    view, projection);
-
-            rotZ++;
-
-            base.Draw(gameTime);
         }
     }
 }

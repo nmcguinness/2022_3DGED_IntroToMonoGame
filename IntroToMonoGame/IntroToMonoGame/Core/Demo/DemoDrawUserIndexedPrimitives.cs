@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Color = Microsoft.Xna.Framework.Color;
 
+/// Technique 2 - Passing an array of vertices and an array of indices
+
 namespace GD
 {
     public class DemoDrawUserIndexedPrimitives
