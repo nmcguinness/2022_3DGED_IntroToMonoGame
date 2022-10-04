@@ -68,22 +68,17 @@ namespace GD
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            //ISRoT
             demoVertexIndexBuffer.Draw(_graphics.GraphicsDevice,
                 effect,
-                Matrix.Identity * Matrix.CreateTranslation(-1, 0, 0),
+                Matrix.Identity
+                * Matrix.CreateRotationY(MathHelper.ToRadians(10 * rotZ))
+                * Matrix.CreateTranslation(1, 0, 0)
+                * Matrix.CreateRotationY(MathHelper.ToRadians(rotZ)),
+
                 view, projection);
 
-            demoVertexIndexBuffer.Draw(_graphics.GraphicsDevice,
-              effect,
-              Matrix.Identity * Matrix.CreateTranslation(1, 0, 0),
-              view, projection);
-
-            demoVertexIndexBuffer.Draw(_graphics.GraphicsDevice,
-            effect,
-            Matrix.Identity *
-            Matrix.CreateScale(0.5f) *
-            Matrix.CreateTranslation(1, 0, -1),
-            view, projection);
+            rotZ++;
 
             base.Draw(gameTime);
         }
