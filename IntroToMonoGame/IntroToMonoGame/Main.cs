@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SharpDX.WIC;
 
 namespace GD
 {
@@ -15,7 +16,9 @@ namespace GD
         private Matrix view;
         private Matrix projection;
         private BasicEffect effect;
-        private DemoVertexIndexBuffer demoVertexIndexBuffer;
+        private Camera camera;
+        private DemoVertexIndices demoVertexIndices;
+        private DemoDrawUserPrimitives demoDrawUserPrimitives;
 
         public Main()
         {
@@ -35,7 +38,7 @@ namespace GD
 
         protected override void Initialize()
         {
-            SetGraphics(1024, 768, false);
+            SetGraphics(640, 480, false);
 
             //view
             view = Matrix.CreateLookAt(new Vector3(0, 2, 2),
@@ -49,7 +52,16 @@ namespace GD
             effect = new BasicEffect(_graphics.GraphicsDevice);
             effect.VertexColorEnabled = true;
 
-            demoVertexIndexBuffer = new DemoVertexIndexBuffer();
+            //camera
+            camera = new Camera(new Vector3(0, 0, 2), Vector3.Zero,
+                Vector3.UnitY);
+
+            //use this area to instanciate different demos
+            demoVertexIndices = new DemoVertexIndices();
+
+            //technique 1
+            demoDrawUserPrimitives =
+                new DemoDrawUserPrimitives(_graphics.GraphicsDevice);
 
             base.Initialize();
         }
@@ -68,15 +80,17 @@ namespace GD
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            //ISRoT
-            demoVertexIndexBuffer.Draw(_graphics.GraphicsDevice,
-                effect,
-                Matrix.Identity
-                * Matrix.CreateRotationY(MathHelper.ToRadians(10 * rotZ))
-                * Matrix.CreateTranslation(1, 0, 0)
-                * Matrix.CreateRotationY(MathHelper.ToRadians(rotZ)),
+            demoDrawUserPrimitives.Draw(Matrix.Identity,
+                effect, camera);
 
-                view, projection);
+            //ISRoT
+            //demoVertexIndices.Draw(_graphics.GraphicsDevice,
+            //    effect,
+            //    Matrix.Identity,
+            //    //* Matrix.CreateRotationY(MathHelper.ToRadians(10 * rotZ))
+            //    //* Matrix.CreateTranslation(1, 0, 0)
+            //    //* Matrix.CreateRotationY(MathHelper.ToRadians(rotZ)),
+            //    view, projection);
 
             rotZ++;
 

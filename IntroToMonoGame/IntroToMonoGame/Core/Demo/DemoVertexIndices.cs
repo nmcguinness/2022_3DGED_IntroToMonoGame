@@ -4,13 +4,13 @@ using Color = Microsoft.Xna.Framework.Color;
 
 namespace GD
 {
-    public class DemoVertexIndexBuffer
+    public class DemoVertexIndices
     {
         private int primitiveCount;
         private VertexPositionColor[] vertices;
         private short[] indices;
 
-        public DemoVertexIndexBuffer()
+        public DemoVertexIndices()
         {
             InitializeVertices();
         }

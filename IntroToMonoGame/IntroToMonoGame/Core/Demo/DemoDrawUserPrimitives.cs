@@ -2,6 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Color = Microsoft.Xna.Framework.Color;
 
+///
+/// Technique 1 - Passing an array of vertices
+
 namespace GD
 {
     public class DemoDrawUserPrimitives
@@ -30,8 +33,8 @@ namespace GD
             effect.World = world;
             effect.View = camera.View;
             effect.Projection = camera.Projection;
-
             effect.CurrentTechnique.Passes[0].Apply();
+
             graphicsDevice.DrawUserPrimitives(
                 PrimitiveType.TriangleList, verts, 0, 1);
         }
