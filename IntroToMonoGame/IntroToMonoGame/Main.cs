@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using SharpDX.WIC;
 
 namespace GD
 {
@@ -9,19 +7,16 @@ namespace GD
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private VertexPositionColor[] vertices;
-        private short[] indices;
         private float rotZ;
-        private Matrix world;
-        private Matrix view;
-        private Matrix projection;
         private BasicEffect effect;
         private RasterizerState rasterizerState;
         private Camera camera;
-        private DemoVertexIndices demoVertexIndices;
+
         private DemoDrawUserPrimitives demoDrawUserPrimitives;
         private DemoDrawPrimitives demoDrawPrimitives;
+        private DemoDrawUserIndexedPrimitives demoDrawUserIndexedPrimitives;
         private DemoDrawIndexedPrimitives demoDrawIndexedPrimitives;
+        private DemoDrawInstancedPrimitives demoDrawInstancedPrimitives;
 
         public Main()
         {
@@ -43,14 +38,6 @@ namespace GD
         {
             SetGraphics(640, 480, false);
 
-            //view
-            view = Matrix.CreateLookAt(new Vector3(0, 2, 2),
-                Vector3.Zero, Vector3.UnitY);
-
-            //projection
-            projection = Matrix.CreatePerspectiveFieldOfView(
-                MathHelper.PiOver2, 640.0f / 480, 0.1f, 100);
-
             //effect
             effect = new BasicEffect(_graphics.GraphicsDevice);
             effect.VertexColorEnabled = true;
@@ -62,12 +49,12 @@ namespace GD
             camera = new Camera(new Vector3(0, 0, 5), Vector3.Zero,
                 Vector3.UnitY);
 
-            //technique 2 - pass vertices and indices
-            demoVertexIndices = new DemoVertexIndices();
-
             //technique 1 - pass vertices
             demoDrawUserPrimitives =
                 new DemoDrawUserPrimitives(_graphics.GraphicsDevice);
+
+            //technique 2 - pass vertices and indices
+            demoDrawUserIndexedPrimitives = new DemoDrawUserIndexedPrimitives(_graphics.GraphicsDevice);
 
             //technique 3 - set vertices on buffer
             demoDrawPrimitives =
@@ -77,6 +64,11 @@ namespace GD
             demoDrawIndexedPrimitives
                 = new DemoDrawIndexedPrimitives(_graphics.GraphicsDevice);
 
+            //technique 5 - set vertex and index buffers and pass an array of transforms. double wahoo!
+            Effect instancedEffect = Content.Load<Effect>("Assets/Shaders/DrawInstanced");
+            demoDrawInstancedPrimitives
+                = new DemoDrawInstancedPrimitives(_graphics.GraphicsDevice, instancedEffect);
+
             base.Initialize();
         }
 
@@ -84,9 +76,20 @@ namespace GD
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            //technique 1 - pass vertices
+            //demoDrawUserPrimitives.Draw(Matrix.Identity, effect, camera);
+
+            //technique 2 - pass vertices and indices
+            //demoDrawUserIndexedPrimitives.Draw(Matrix.Identity, effect, camera);
+
+            //technique 3 - set vertices on buffer
             //demoDrawPrimitives.Draw(Matrix.Identity, effect, camera);
-            demoDrawIndexedPrimitives.Draw(Matrix.Identity,
-                effect, camera);
+
+            //technique 4 - set vertex and index buffers. wahoo!
+            //demoDrawIndexedPrimitives.Draw(Matrix.Identity, effect, camera);
+
+            //technique 5 - set vertex and index buffers and pass an array of transforms. double wahoo!
+            demoDrawInstancedPrimitives.Draw(camera);
 
             base.Draw(gameTime);
         }
