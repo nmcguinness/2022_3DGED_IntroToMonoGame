@@ -18,6 +18,7 @@ namespace GD
         private DemoDrawIndexedPrimitives demoDrawIndexedPrimitives;
         private DemoDrawInstancedPrimitives demoDrawInstancedPrimitives;
         private DemoDrawIndexedCube demoDrawIndexedCube;
+        private DemoDrawIndexedLitCube demoDrawIndexedLitCube;
 
         public Main()
         {
@@ -41,7 +42,10 @@ namespace GD
 
             //effect
             effect = new BasicEffect(_graphics.GraphicsDevice);
-            effect.VertexColorEnabled = true;
+            effect.LightingEnabled = true;
+            effect.PreferPerPixelLighting = true;
+            effect.EnableDefaultLighting();
+            //  effect.VertexColorEnabled = true;
 
             RasterizerState rs = new RasterizerState();
             rs.CullMode = CullMode.None;
@@ -51,7 +55,7 @@ namespace GD
             rasterizerState = new RasterizerState();
 
             //camera
-            camera = new Camera(new Vector3(0, 0, 5), Vector3.Zero,
+            camera = new Camera(new Vector3(0, 1, 2), Vector3.Zero,
                 Vector3.UnitY);
 
             //technique 1 - pass vertices
@@ -77,6 +81,9 @@ namespace GD
             //exercise - solid cube
             demoDrawIndexedCube = new DemoDrawIndexedCube(_graphics.GraphicsDevice);
 
+            //exercise - solid LIT plane
+            demoDrawIndexedLitCube = new DemoDrawIndexedLitCube(_graphics.GraphicsDevice);
+
             base.Initialize();
         }
 
@@ -100,9 +107,15 @@ namespace GD
             //demoDrawInstancedPrimitives.Draw(camera);
 
             //exercise - solid cube
-            demoDrawIndexedCube.Draw(
-                Matrix.Identity * Matrix.CreateRotationY(
-                    MathHelper.ToRadians(rotZ)),
+            //demoDrawIndexedCube.Draw(
+            //    Matrix.Identity * Matrix.CreateRotationY(
+            //        MathHelper.ToRadians(rotZ)),
+            //    effect, camera);
+
+            demoDrawIndexedLitCube.Draw(
+                    Matrix.Identity *
+                    Matrix.CreateRotationX(MathHelper.ToRadians(rotZ / 30.0f)) *
+                    Matrix.CreateRotationY(MathHelper.ToRadians(rotZ)),
                 effect, camera);
 
             rotZ++;
