@@ -6,7 +6,7 @@ using Color = Microsoft.Xna.Framework.Color;
 
 namespace GD
 {
-    public class DemoDrawIndexedCube
+    public class DemoDrawIndexedLitCube
     {
         private GraphicsDevice graphicsDevice;
         private VertexPositionColor[] verts;
@@ -14,7 +14,7 @@ namespace GD
         private short[] indices;
         private IndexBuffer indexBuffer;
 
-        public DemoDrawIndexedCube(GraphicsDevice graphicsDevice)
+        public DemoDrawIndexedLitCube(GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
             InitializeVertices();

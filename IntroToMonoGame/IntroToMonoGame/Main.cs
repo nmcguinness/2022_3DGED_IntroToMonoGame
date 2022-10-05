@@ -17,6 +17,7 @@ namespace GD
         private DemoDrawUserIndexedPrimitives demoDrawUserIndexedPrimitives;
         private DemoDrawIndexedPrimitives demoDrawIndexedPrimitives;
         private DemoDrawInstancedPrimitives demoDrawInstancedPrimitives;
+        private DemoDrawIndexedCube demoDrawIndexedCube;
 
         public Main()
         {
@@ -41,6 +42,10 @@ namespace GD
             //effect
             effect = new BasicEffect(_graphics.GraphicsDevice);
             effect.VertexColorEnabled = true;
+
+            RasterizerState rs = new RasterizerState();
+            rs.CullMode = CullMode.None;
+            _graphics.GraphicsDevice.RasterizerState = rs;
 
             //rasterizer state allows us to draw front and back using cullmode
             rasterizerState = new RasterizerState();
@@ -69,6 +74,9 @@ namespace GD
             demoDrawInstancedPrimitives
                 = new DemoDrawInstancedPrimitives(_graphics.GraphicsDevice, instancedEffect);
 
+            //exercise - solid cube
+            demoDrawIndexedCube = new DemoDrawIndexedCube(_graphics.GraphicsDevice);
+
             base.Initialize();
         }
 
@@ -89,7 +97,15 @@ namespace GD
             //demoDrawIndexedPrimitives.Draw(Matrix.Identity, effect, camera);
 
             //technique 5 - set vertex and index buffers and pass an array of transforms. double wahoo!
-            demoDrawInstancedPrimitives.Draw(camera);
+            //demoDrawInstancedPrimitives.Draw(camera);
+
+            //exercise - solid cube
+            demoDrawIndexedCube.Draw(
+                Matrix.Identity * Matrix.CreateRotationY(
+                    MathHelper.ToRadians(rotZ)),
+                effect, camera);
+
+            rotZ++;
 
             base.Draw(gameTime);
         }
