@@ -6,7 +6,7 @@ using Color = Microsoft.Xna.Framework.Color;
 
 namespace GD
 {
-    public class DemoDrawIndexedLitCube
+    public class DemoDrawIndexedLitPlane
     {
         private GraphicsDevice graphicsDevice;
         private VertexPositionColorNormal[] verts;
@@ -14,7 +14,7 @@ namespace GD
         private short[] indices;
         private IndexBuffer indexBuffer;
 
-        public DemoDrawIndexedLitCube(GraphicsDevice graphicsDevice)
+        public DemoDrawIndexedLitPlane(GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
             InitializeVertices();
@@ -26,7 +26,7 @@ namespace GD
             float halfSize = 0.5f;
 
             verts = new VertexPositionColorNormal[] {
-                //top surface
+                //top face
         new VertexPositionColorNormal(new Vector3(-halfSize, halfSize, halfSize),
         Color.Red, new Vector3(0,1,0)), //TFL - 0
                 new VertexPositionColorNormal(new Vector3(halfSize, halfSize, halfSize),

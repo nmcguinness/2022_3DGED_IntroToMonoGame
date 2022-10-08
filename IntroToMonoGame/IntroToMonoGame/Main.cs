@@ -18,7 +18,10 @@ namespace GD
         private DemoDrawIndexedPrimitives demoDrawIndexedPrimitives;
         private DemoDrawInstancedPrimitives demoDrawInstancedPrimitives;
         private DemoDrawIndexedCube demoDrawIndexedCube;
-        private DemoDrawIndexedLitCube demoDrawIndexedLitCube;
+        private DemoDrawIndexedLitPlane demoDrawIndexedLitPlane;
+        private Texture2D planeTexture;
+        private DemoDrawLitTexturedPlane demoDrawLitTexturedPlane;
+        private BasicEffect texturedEffect;
 
         public Main()
         {
@@ -40,13 +43,24 @@ namespace GD
         {
             SetGraphics(640, 480, false);
 
-            //effect
+            //effect used for VertexPositionColorNormal demos
             effect = new BasicEffect(_graphics.GraphicsDevice);
             effect.LightingEnabled = true;
             effect.PreferPerPixelLighting = true;
             effect.EnableDefaultLighting();
-            //  effect.VertexColorEnabled = true;
+            // effect.VertexColorEnabled = true;
+            effect.SpecularPower = 256;
+            effect.SpecularColor = Color.Red.ToVector3();
+            effect.DirectionalLight0.DiffuseColor = Color.Green.ToVector3();
 
+            //effect used for VertexPositionNormalTexture demos (i.e. lit demos)
+            texturedEffect = new BasicEffect(_graphics.GraphicsDevice);
+            texturedEffect.LightingEnabled = true;
+            texturedEffect.TextureEnabled = true;
+            texturedEffect.PreferPerPixelLighting = true;
+            texturedEffect.EnableDefaultLighting();
+
+            //tell the gfx card to show both sides of the drawn primitives
             RasterizerState rs = new RasterizerState();
             rs.CullMode = CullMode.None;
             _graphics.GraphicsDevice.RasterizerState = rs;
@@ -55,34 +69,33 @@ namespace GD
             rasterizerState = new RasterizerState();
 
             //camera
-            camera = new Camera(new Vector3(0, 1, 2), Vector3.Zero,
-                Vector3.UnitY);
+            camera = new Camera(new Vector3(0, 0, 2), Vector3.Zero, Vector3.UnitY);
 
             //technique 1 - pass vertices
-            demoDrawUserPrimitives =
-                new DemoDrawUserPrimitives(_graphics.GraphicsDevice);
+            demoDrawUserPrimitives = new DemoDrawUserPrimitives(_graphics.GraphicsDevice);
 
             //technique 2 - pass vertices and indices
             demoDrawUserIndexedPrimitives = new DemoDrawUserIndexedPrimitives(_graphics.GraphicsDevice);
 
             //technique 3 - set vertices on buffer
-            demoDrawPrimitives =
-                new DemoDrawPrimitives(_graphics.GraphicsDevice);
+            demoDrawPrimitives = new DemoDrawPrimitives(_graphics.GraphicsDevice);
 
             //technique 4 - set vertex and index buffers. wahoo!
-            demoDrawIndexedPrimitives
-                = new DemoDrawIndexedPrimitives(_graphics.GraphicsDevice);
+            demoDrawIndexedPrimitives = new DemoDrawIndexedPrimitives(_graphics.GraphicsDevice);
 
             //technique 5 - set vertex and index buffers and pass an array of transforms. double wahoo!
             Effect instancedEffect = Content.Load<Effect>("Assets/Shaders/DrawInstanced");
-            demoDrawInstancedPrimitives
-                = new DemoDrawInstancedPrimitives(_graphics.GraphicsDevice, instancedEffect);
+            demoDrawInstancedPrimitives = new DemoDrawInstancedPrimitives(_graphics.GraphicsDevice, instancedEffect);
 
             //exercise - solid cube
             demoDrawIndexedCube = new DemoDrawIndexedCube(_graphics.GraphicsDevice);
 
             //exercise - solid LIT plane
-            demoDrawIndexedLitCube = new DemoDrawIndexedLitCube(_graphics.GraphicsDevice);
+            demoDrawIndexedLitPlane = new DemoDrawIndexedLitPlane(_graphics.GraphicsDevice);
+
+            //exercise - textured lit plane
+            planeTexture = Content.Load<Texture2D>("Assets/Textures/Mona_Lisa");
+            demoDrawLitTexturedPlane = new DemoDrawLitTexturedPlane(_graphics.GraphicsDevice);
 
             base.Initialize();
         }
@@ -112,12 +125,18 @@ namespace GD
             //        MathHelper.ToRadians(rotZ)),
             //    effect, camera);
 
-            demoDrawIndexedLitCube.Draw(
-                    Matrix.Identity *
-                    Matrix.CreateRotationX(MathHelper.ToRadians(rotZ / 30.0f)) *
-                    Matrix.CreateRotationY(MathHelper.ToRadians(rotZ)),
-                effect, camera);
+            //demoDrawIndexedLitPlane.Draw(
+            //        Matrix.Identity *
+            //        Matrix.CreateRotationX(MathHelper.ToRadians(rotZ / 30.0f)) *
+            //        Matrix.CreateRotationY(MathHelper.ToRadians(rotZ)),
+            //    effect, camera);
 
+            demoDrawLitTexturedPlane.Draw(
+                    Matrix.Identity *
+                    Matrix.CreateRotationY(MathHelper.ToRadians(rotZ)),
+                texturedEffect, camera, planeTexture);
+
+            //used for rotating demo primitives
             rotZ++;
 
             base.Draw(gameTime);
