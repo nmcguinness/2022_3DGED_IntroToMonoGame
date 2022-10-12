@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GD;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Color = Microsoft.Xna.Framework.Color;
 
 /// Technique 3 - Setting an array of vertices on VRAM on GPU
 
-namespace GD
+namespace IntroToMonoGame.Core.Demo.Unlit
 {
     public class DemoDrawPrimitives
     {

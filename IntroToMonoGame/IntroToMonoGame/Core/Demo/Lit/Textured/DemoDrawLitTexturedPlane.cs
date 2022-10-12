@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GD;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 /// Exercise using VertexPositionNormalTexture - Draw a textured lit plane
 
-namespace GD
+namespace IntroToMonoGame.Core.Demo.Lit
 {
     public class DemoDrawLitTexturedPlane
     {

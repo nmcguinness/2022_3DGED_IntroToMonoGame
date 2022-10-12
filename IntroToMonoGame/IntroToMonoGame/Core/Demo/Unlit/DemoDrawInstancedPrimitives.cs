@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GD;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Runtime.InteropServices;
 using Color = Microsoft.Xna.Framework.Color;
 using VertexBufferBinding = Microsoft.Xna.Framework.Graphics.VertexBufferBinding;
 
-namespace GD
+namespace IntroToMonoGame.Core.Demo.Unlit
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct VertexInstanceTransform : IVertexType

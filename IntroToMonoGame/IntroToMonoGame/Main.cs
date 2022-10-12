@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using IntroToMonoGame.Core.Demo.Lit;
+using IntroToMonoGame.Core.Demo.Unlit;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GD

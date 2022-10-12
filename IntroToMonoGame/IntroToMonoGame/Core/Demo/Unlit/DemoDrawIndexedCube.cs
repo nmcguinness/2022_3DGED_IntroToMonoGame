@@ -1,19 +1,21 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GD;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Color = Microsoft.Xna.Framework.Color;
 
-/// Technique 4 - Setting an array of vertices and indices on VRAM on GPU
+/// Exercise using Technique 4 - Draw a solid coloured cube
 
-namespace GD
+namespace IntroToMonoGame.Core.Demo.Unlit
 {
-    public class DemoDrawIndexedPrimitives
+    public class DemoDrawIndexedCube
     {
         private GraphicsDevice graphicsDevice;
         private VertexPositionColor[] verts;
         private VertexBuffer vertexBuffer;
+        private short[] indices;
         private IndexBuffer indexBuffer;
 
-        public DemoDrawIndexedPrimitives(GraphicsDevice graphicsDevice)
+        public DemoDrawIndexedCube(GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;
             InitializeVertices();
@@ -22,11 +24,20 @@ namespace GD
 
         public void InitializeVertices()
         {
+            float halfSize = 0.5f;
+
             verts = new VertexPositionColor[] {
-                new VertexPositionColor(new Vector3(-1, -1, 0), Color.Red),
-                new VertexPositionColor(new Vector3(-1, 1, 0), Color.Green),
-                new VertexPositionColor(new Vector3(1,1, 0), Color.Blue),
-                   new VertexPositionColor(new Vector3(1,-1, 0), Color.Yellow)
+                //top surface
+        new VertexPositionColor(new Vector3(-halfSize, halfSize, halfSize), Color.Red), //TFL - 0
+                new VertexPositionColor(new Vector3(halfSize, halfSize, halfSize), Color.Green), //TRL - 1
+                new VertexPositionColor(new Vector3(halfSize, halfSize, -halfSize), Color.Blue), //2
+                   new VertexPositionColor(new Vector3(-halfSize, halfSize, -halfSize), Color.Yellow), //3 etc
+
+                //bottom surface
+      new VertexPositionColor(new Vector3(-halfSize, -halfSize, halfSize), Color.Red), //BFL
+                new VertexPositionColor(new Vector3(halfSize, -halfSize, halfSize), Color.Red), //BFR
+                new VertexPositionColor(new Vector3(halfSize, -halfSize, -halfSize), Color.Red),
+                   new VertexPositionColor(new Vector3(-halfSize, -halfSize, -halfSize), Color.Red)
             };
         }
 
@@ -36,9 +47,14 @@ namespace GD
                 typeof(VertexPositionColor), verts.Length, BufferUsage.WriteOnly);
             vertexBuffer.SetData(verts); //moving the vertices to VRAM
 
-            var indices = new short[] {
+            indices = new short[] {
                 //order of these indices affects WINDING order of triangle
-                0, 1, 2, 0, 2, 3,
+                0, 1, 4, 1,5,4, //FRONT
+                0, 3, 1, 1, 3, 2, //TOP
+                2, 3, 7, 2, 7, 6, //BACK
+                3, 0, 7, 0, 4, 7, //LEFT
+                1, 2, 6, 1, 6, 5, //RIGHT
+                4, 5, 6, 4, 5, 7, //BOTTOM
             };
 
             indexBuffer = new IndexBuffer(graphicsDevice, typeof(short),
@@ -59,7 +75,7 @@ namespace GD
             graphicsDevice.Indices = indexBuffer;
 
             graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList,
-                0, 0, 2);
+                0, 0, indices.Length / 3);
         }
     }
 }
